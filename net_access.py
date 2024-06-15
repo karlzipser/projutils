@@ -2,6 +2,7 @@ print(__file__)
 from utilz2 import *
 import torch
 
+
 def get_net(
     device='',
     net_class=None,

@@ -14,11 +14,11 @@ def run_project(src,repos=[opjh('projutils')],termout=1):
         s+='-'+get_safe_name(p.tag)
     dst=opjh('project_'+name,s)
     mkdirp(dst)
-    os_system('rsync -ravL',src,dst,e=1,a=1)
+    os_system('rsync -ravL',"--exclude '*.pyc'","--exclude '.git*'",src,dst,e=1,a=1)
     for d in ['env','figures','net/weights','stats']:
         mkdirp(opj(dst,name,d))
     for d in repos:
-        os_system('rsync -ravL',d,opj(dst,name,'env'),e=1,a=1)
+        os_system('rsync -ravL',"--exclude '*.pyc'","--exclude '.git*'",d,opj(dst,name,'env'),e=1,a=1)
 
     m=most_recent_file_in_folder(opjh('project_'+name)).replace(opjh(),'')
     cg(m)

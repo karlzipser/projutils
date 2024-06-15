@@ -42,6 +42,7 @@ def get_net(
     else:
         print('*** Starting with random weights.')
         assert net
+    print('*** net.to(',device,')')
     net.to(device)
     return net
 

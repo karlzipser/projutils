@@ -1,17 +1,15 @@
 #print(__file__)
 from utilz2 import *
 
+
 def merge_content(
-    w=opjh('snippets/working'),
+    w=opjh('project_tac'),
+    most_recent=1,
     show=True,
     default_height=120,
 ):
-    """
-    exec(gcsp(opjh('utilz2'),include_output=1));merge_snippets();CA()
-    u2.sn.src=opjh('utilz2')
-    u2.sn.dst=opjh('snippets/working')
-    exec(gcsp(u2.spath,include_output=1));merge_snippets();CA()
-    """
+    if most_recent:
+        w=most_recent_file_in_folder(w)
     from pygments import highlight
     from pygments.lexers import PythonLexer
     from pygments.formatters import HtmlFormatter
@@ -88,5 +86,17 @@ def merge_content(
         '\n'.join(hs)
     )
     open_url(htmlfile)
+
+
+
+if __name__ == '__main__':
+    args=dict(
+        src='',
+        most_recent=1,
+    )
+    p=getparser(**args)
+    assert ope(p.src)
+    merge_content(w=p.src,most_recent=p.most_recent,default_height=u2.sn.default_height)
+
 
 #EOF

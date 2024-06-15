@@ -37,7 +37,6 @@ if __name__ == '__main__':
     p=getparser(**args)
     assert ope(p.src)
     run_project(p.src)
-    #merge_content('/Users/karlzipser/project_tac/15Jun24_08h40m32s-Sat2',default_height=u2.sn.default_height)
 
 
 #EOF

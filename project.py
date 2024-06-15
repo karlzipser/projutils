@@ -27,7 +27,7 @@ def run_project(src,repos=[opjh('projutils')],termout=termout):
     m=d2p(m.replace('/','.'),name,'code.main')
     cy(m)
     s=d2s('python3 -m',m)
-    if not termout:
+    if not p.termout:
         s=d2s(s,'>',o)
     os_system(s,e=1)
 

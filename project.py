@@ -7,7 +7,7 @@ e.g.,
     python3 projutils/project.py --src tac --tag Sat2
 """
 
-def run_project(src,repos=[opjh('projutils')]):
+def run_project(src,repos=[opjh('projutils')],termout=termout):
     name=fname(src)
     s=time_str()
     if p.tag:
@@ -26,17 +26,20 @@ def run_project(src,repos=[opjh('projutils')]):
     cb(o)
     m=d2p(m.replace('/','.'),name,'code.main')
     cy(m)
-    os_system('python3 -m',m,' > ',o,e=1)
+    s=d2s('python3 -m',m)
+    if not termout:
+        s=d2s(s,'>',o)
+    os_system(s,e=1)
 
 if __name__ == '__main__':
     args=dict(
         src='',
         tag='',
-        termout=True,
+        termout=1,
     )
     p=getparser(**args)
     assert ope(p.src)
-    run_project(p.src)
+    run_project(p.src,termout=p.termout)
 
 
 #EOF

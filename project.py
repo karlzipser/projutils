@@ -7,7 +7,7 @@ e.g.,
     python3 projutils/project.py --src tac --tag Sat2
 """
 
-def run_project(src,repos=[opjh('projutils')],termout=termout):
+def run_project(src,repos=[opjh('projutils')],termout=1):
     name=fname(src)
     s=time_str()
     if p.tag:

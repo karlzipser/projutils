@@ -85,6 +85,7 @@ def merge_content(
         htmlfile,
         '\n'.join(hs)
     )
+    
     open_url(htmlfile)
 
 

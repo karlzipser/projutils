@@ -25,7 +25,7 @@ def merge_content(
   fs.reverse()
   hs=[]
   for f in fs:
-    cg(f)
+    #cg(f)
     if '/env/' in f:
       continue
     div=''
@@ -59,7 +59,7 @@ def merge_content(
               #f.replace(w+'/','')).replace(
               #  'HEIGHT',str(height)).replace(
               #    'WIDTH',str(width))
-      cb(div)
+      #cb(div)
     else:
       txt=file_to_text(f)
       txt=d2n('file: ',qtds(f.replace(w,'')[1:]),'\n',txt)
@@ -83,7 +83,7 @@ def merge_content(
       height=default_height
     div=div.replace('HEIGHT',str(height))
     if 'application/pdf' in div:
-        cy(div)
+        pass#cy(div)
     if div:
       hs.append(div)
   hs=[css]+[d2n('<font face="Courier"><h1>',w.replace(opjh(),''),

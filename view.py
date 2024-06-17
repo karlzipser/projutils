@@ -3,7 +3,9 @@
 #print(__file__)
 from utilz2 import *
 
+
 def merge_content(
+<<<<<<< HEAD
   w=opjh('snippets/working'),
   show=True,
   default_height=120,
@@ -50,6 +52,51 @@ def merge_content(
         height=512
         width=height
       div="""
+=======
+    w=opjh('project_tac'),
+    most_recent=1,
+    show=True,
+    default_height=120,
+):
+    if most_recent:
+        w=most_recent_file_in_folder(w)
+    from pygments import highlight
+    from pygments.lexers import PythonLexer
+    from pygments.formatters import HtmlFormatter
+    css='\n'.join([
+        '<head><style>',
+        HtmlFormatter().get_style_defs('.highlight'),
+        '</style></head>',
+        ' '
+    ])
+    mkdirp_(w)
+    fs=find_files(w,['*.py','*.pdf','*.txt'],noisy=False)
+    fs = sorted(fs, key=get_file_mtime)
+    fs.reverse()
+    hs=[]
+    for f in fs:
+        if '/env/' in f:
+            continue
+        div=''
+        con=False
+        for f_ in f.split('/'):
+            if len(f_) and f_[0]=='_':
+                con=True
+        if con:
+            continue
+        dims=parse_dimensions(f)
+        if not isNone(dims):
+            height=dims[0]
+            width=dims[1]
+        else:
+            height=0
+            width=height
+        if '.pdf' in f:
+            if not height:
+                height=512
+                width=height
+            div="""
+>>>>>>> 58a838b0684cac62cfa00b8301bd5c33edbc075f
 <div>
 <object data="PDFFILE"
       type="application/pdf"
@@ -97,5 +144,21 @@ def merge_content(
   )
   open_url(htmlfile)
 
+<<<<<<< HEAD
 #EOF
 ## 79 ########################################################################
+=======
+
+
+if __name__ == '__main__':
+    args=dict(
+        src='',
+        most_recent=1,
+    )
+    p=getparser(**args)
+    assert ope(p.src)
+    merge_content(w=p.src,most_recent=p.most_recent,default_height=u2.sn.default_height)
+
+
+#EOF
+>>>>>>> 58a838b0684cac62cfa00b8301bd5c33edbc075f

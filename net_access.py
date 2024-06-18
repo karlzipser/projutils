@@ -18,7 +18,6 @@ def get_net(
       ~/project_<name>/<run name>/<name>/net/weights/<weight name>.pth
   Then, run_path should be opjh('project_<name>/<run name>')
   """
-
   assert device
   net=None
   if net_class:
@@ -30,6 +29,7 @@ def get_net(
     print('*** Attempting to load from',weights_file+':')
     print('\t',net.load_state_dict(torch.load(weights_file)))
   elif run_path:
+    cb(run_path)
     assert ope(run_path)
     assert isNone(net)
     import importlib.util
@@ -39,7 +39,7 @@ def get_net(
     spec = importlib.util.spec_from_file_location(module_name,file_path)
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
-    w=most_recent_file_in_folder(opj(pname(pname(module.net_path)),'weights'))
+    w=opj(pname(pname(module.net_path)),'weights/best.pth')
     # allow to work if no saved weights
     return get_net(device=device,net_class=module.Net,weights_file=w)
   else:

@@ -101,12 +101,17 @@ if __name__ == '__main__':
     args=dict(
         src='',
         most_recent=1,
+        repeat=30,
     )
     p=getparser(**args)
     assert ope(p.src)
     if p.most_recent:
       p.src=most_recent_file_in_folder(p.src)
-    merge_content(w=p.src,default_height=u2.sn.default_height)
-
+    while True:
+      merge_content(w=p.src,default_height=u2.sn.default_height)
+      if not p.repeat:
+        break
+      else:
+        time.sleep(p.repeat)
 
 #EOF

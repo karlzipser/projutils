@@ -13,7 +13,6 @@ class Loss_Recorder():
         sampletime=1,
         pct_to_show=100,
         s=0.1,
-        name='train loss',
     ):
         super(Loss_Recorder,self).__init__()
         packdict(self,locals())
@@ -27,18 +26,15 @@ class Loss_Recorder():
         self.sampletimer=Timer(sampletime)
         self.acc_ctr=0
         self.acc=0
-    def add(self,d,external_ctr=None):
+    def add(self,d):
         self.acc+=d
         self.acc_ctr+=1
         if not self.sampletimer.rcheck():
             return
         d=self.acc/self.acc_ctr
         self.acc=0
-        self.acc_ctr=0
-        if isNone(external_ctr):
-            self.ctr+=1
-        else:
-            self.ctr=external_ctr
+        self.acc_ctr=0        
+        self.ctr+=1
         self.i.append(self.ctr)
         self.t.append(time.time())
         self.f.append(d)
@@ -56,27 +52,25 @@ class Loss_Recorder():
         for k in ['i','f','t','r','ctr']:
             if 'timer' not in k:
                 d[k]=self.__dict__[k]
-        so(opj(self.path,get_safe_name(self.name)),d)
+        so(opj(self.path,'loss'),d)
     def load(self):
-        d=lo(opj(self.path,get_safe_name(self.name)))
+        d=lo(opj(self.path,'loss'))
         for k in d:
             self.__dict__[k]=d[k]
-    def plot(self,clear=True,rawcolor='c',smoothcolor='b'):
+    def plot(self):
         if not self.plottimer.rcheck():
             return
-        figure(self.name)
-        if clear:
-            clf()
+        figure('loss')
+        clf()
         idx=int(len(self.i)*(100-self.pct_to_show)/100)
-        plot(self.i[idx:],self.f[idx:],rawcolor)
-        plot(self.i[idx:],self.r[idx:],smoothcolor,label=self.name)
+        plot(self.i[idx:],self.f[idx:],'c')
+        plot(self.i[idx:],self.r[idx:],'b')
         plt.xlabel('iterations');
         plt.ylabel('loss')
-        plt.title(d2s(self.name,self.path.replace(opjh(),'')))
-        spause()
-        plt.savefig(opj(self.path,get_safe_name(self.name)+'.pdf'))
-    def do(self,d,external_ctr=None):
-        self.add(d,external_ctr=external_ctr)
+        plt.title(self.path.replace(opjh(),''))
+        plt.savefig(opj(self.path,'loss.pdf'))
+    def do(self,d):
+        self.add(d)
         self.plot()
         self.save()
     def current(self):

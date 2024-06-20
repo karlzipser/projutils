@@ -69,6 +69,7 @@ class Loss_Recorder():
         d=lo(opj(self.path,get_safe_name(self.name)))
         for k in d:
             self.__dict__[k]=d[k]
+        cb('loaded',opj(self.path,get_safe_name(self.name)))
     def plot(self,clear=True,rawcolor='c',smoothcolor='b',savefig=False):
         #if not self.plottimer.rcheck():
         #    return

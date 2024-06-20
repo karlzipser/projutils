@@ -28,14 +28,12 @@ class Loss_Recorder():
         self.sampletimer=Timer(sampletime)
         self.acc_ctr=0
         self.acc=0
+        cE(self.path,self.name)
     def add(self,d,external_ctr=None):
         self.acc+=d
         self.acc_ctr+=1
-        #if not self.sampletimer.rcheck():
-        #    return
         if self.acc_ctr<5:
             return
-        #print(self.name,self.acc_ctr)
         d=self.acc/self.acc_ctr
         self.acc=0
         self.acc_ctr=0
@@ -48,10 +46,7 @@ class Loss_Recorder():
         self.f.append(d)
 
         if len(self.r):
-            #s=1-(1-self.s)/max(1,(self.s_level-self.ctr))
             s=1-(1-self.s)*self.ctr/(self.s_level+self.ctr)
-            #print(s)
-            #s=self.s
             a=self.r[-1]
             b=(1-s)*a+s*d
             self.r.append(b)
@@ -66,14 +61,13 @@ class Loss_Recorder():
                 d[k]=self.__dict__[k]
         so(opj(self.path,get_safe_name(self.name)),d)
     def load(self):
-        d=lo(opj(self.path,get_safe_name(self.name)))
+        f=opj(self.path,get_safe_name(self.name)+'.pkl')
+        cg(f)
+        d=lo(f)
         for k in d:
             self.__dict__[k]=d[k]
-        cb('loaded',opj(self.path,get_safe_name(self.name)))
+        cb('loaded',f)
     def plot(self,clear=True,rawcolor='c',smoothcolor='b',savefig=False):
-        #if not self.plottimer.rcheck():
-        #    return
-        #print(self.name)
         figure('loss')
         if clear:
             clf()
@@ -82,16 +76,15 @@ class Loss_Recorder():
         plot(self.i[idx:],self.r[idx:],smoothcolor,label=self.name)
         plt.xlabel('iterations');
         plt.ylabel('loss')
-        plt.title('loss')#d2s(self.name,self.path.replace(opjh(),'')))
-        
+        plt.title('loss')
         if savefig:
             plt.savefig(opj(self.path,'loss.pdf'))
     def do(self,d,external_ctr=None):
         self.add(d,external_ctr=external_ctr)
-        #self.plot()
         self.save()
     def current(self):
         return self.r[-1]
 #eoc
+
 #EOF
 ## 79 ########################################################################

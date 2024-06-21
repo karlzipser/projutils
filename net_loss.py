@@ -28,7 +28,7 @@ class Loss_Recorder():
         self.sampletimer=Timer(sampletime)
         self.acc_ctr=0
         self.acc=0
-        cE(self.path,self.name)
+        #cE(self.path,self.name)
     def add(self,d,external_ctr=None):
         self.acc+=d
         self.acc_ctr+=1

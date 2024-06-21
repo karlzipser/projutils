@@ -8,6 +8,7 @@ def merge_content(
   w=opjh('snippets/working'),
   show=True,
   default_height=120,
+  nettab=True,
 ):
 
   from pygments import highlight
@@ -93,7 +94,8 @@ def merge_content(
     htmlfile,
     '\n'.join(hs)
   )
-  open_url(htmlfile)
+  if newtab:
+    open_url(htmlfile)
 
 
 
@@ -107,8 +109,10 @@ if __name__ == '__main__':
     assert ope(p.src)
     if p.most_recent:
       p.src=most_recent_file_in_folder(p.src)
+    newtab=True
     while True:
-      merge_content(w=p.src,default_height=u2.sn.default_height)
+      merge_content(w=p.src,default_height=u2.sn.default_height,newtab=newtab)
+      nettab=False
       if not p.repeat:
         break
       else:

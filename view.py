@@ -112,7 +112,7 @@ if __name__ == '__main__':
     newtab=True
     while True:
       merge_content(w=p.src,default_height=u2.sn.default_height,newtab=newtab)
-      nettab=False
+      newtab=False
       if not p.repeat:
         break
       else:

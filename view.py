@@ -8,7 +8,7 @@ def merge_content(
   w=opjh('snippets/working'),
   show=True,
   default_height=120,
-  nettab=True,
+  newtab=True,
 ):
 
   from pygments import highlight

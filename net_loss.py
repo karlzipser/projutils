@@ -75,8 +75,8 @@ class Loss_Recorder():
         plot(self.i[idx:],self.f[idx:],rawcolor)
         plot(self.i[idx:],self.r[idx:],smoothcolor,label=self.name)
         plt.xlabel('iterations');
-        plt.ylabel('loss')
-        plt.title('loss')
+        plt.ylabel(self.name)
+        plt.title(self.name)
         if savefig:
             plt.savefig(opj(self.path,get_safe_name(fig+'.pdf')))
     def do(self,d,external_ctr=None):

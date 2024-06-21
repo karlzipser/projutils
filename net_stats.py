@@ -26,6 +26,6 @@ def get_accuracy(net,testloader,classes,device):
     acc_mean/=ctr
     stats.append(d2n('\tMean accuracy is ',int(acc_mean),'%.'))
     stats='\n'.join(stats)
-    return stats
+    return stats,acc_mean
 
 #EOF

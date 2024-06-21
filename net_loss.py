@@ -8,14 +8,15 @@ class Loss_Recorder():
     def __init__(
         self,
         path,
-        plottime=10,
-        savetime=10,
-        sampletime=1,
+        plottime=30,
+        savetime=30,
+        sampletime=10,
         pct_to_show=100,
+        nsamples=30,
         s=0.1,
         s_level=100,
         name='train loss',
-    ):
+        ):
         super(Loss_Recorder,self).__init__()
         packdict(self,locals())
         self.f=[]
@@ -28,11 +29,10 @@ class Loss_Recorder():
         self.sampletimer=Timer(sampletime)
         self.acc_ctr=0
         self.acc=0
-        #cE(self.path,self.name)
     def add(self,d,external_ctr=None):
         self.acc+=d
         self.acc_ctr+=1
-        if self.acc_ctr<5:
+        if self.acc_ctr<self.nsamples:
             return
         d=self.acc/self.acc_ctr
         self.acc=0
@@ -67,8 +67,8 @@ class Loss_Recorder():
         for k in d:
             self.__dict__[k]=d[k]
         cb('loaded',f)
-    def plot(self,clear=True,rawcolor='c',smoothcolor='b',savefig=False):
-        figure('loss')
+    def plot(self,clear=True,rawcolor='c',smoothcolor='b',savefig=False,fig='loss'):
+        figure(fig)
         if clear:
             clf()
         idx=int(len(self.i)*(100-self.pct_to_show)/100)
@@ -78,12 +78,17 @@ class Loss_Recorder():
         plt.ylabel('loss')
         plt.title('loss')
         if savefig:
-            plt.savefig(opj(self.path,'loss.pdf'))
+            plt.savefig(opj(self.path,get_safe_name(fig+'.pdf')))
     def do(self,d,external_ctr=None):
         self.add(d,external_ctr=external_ctr)
         self.save()
     def current(self):
-        return self.r[-1]
+        if len(self.r):
+            return self.r[-1]
+        else:
+            cE('warning')
+            kprint(self.__dict__)
+            return 0
 #eoc
 
 #EOF

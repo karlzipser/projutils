@@ -27,7 +27,7 @@ def get_net(
     assert ope(weights_file)
     assert net
     print('*** Attempting to load from',weights_file+':')
-    print('\t',net.load_state_dict(torch.load(weights_file)))
+    print('\t',net.load_state_dict(torch.load(weights_file,map_location=torch.device(device))))
   elif run_path:
     cb(run_path)
     assert ope(run_path)

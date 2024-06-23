@@ -5,6 +5,8 @@
 ignore_list = ['env']
 extensions = ['.txt','.pdf','.py','.pkl','.pth','.html']+IMAGE_EXTENSIONS
 fdic={}
+
+
 def bytes_to_mb(bytes):
   return bytes / (1024 ** 2)
 
@@ -14,27 +16,32 @@ def time_sleep(seconds):
     while time.time() - start_time < seconds:
         pass
 
-def see(ctr_or_ctr_list,fdic=fdic):
-    if type(ctr_or_ctr_list)==tuple:
-        ctr_or_ctr_list=list(ctr_or_ctr_list)
-    if type(ctr_or_ctr_list) == list:
-        ctr=ctr_or_ctr_list.pop()
-    else:
-        ctr=ctr_or_ctr_list
+
+def star(ctr):
+    f=fdic[ctr]['f']
+    os_system('touch',opj(f,'star-'+time_str()+'.txt'))
+
+
+def comment(ctr):
+    f=fdic[ctr]['f']
+    s=input(d2n('Enter comment on',f,'> '))
+    t2f(opj(f,'comment-'+time_str()+'.txt'),s)
+
+
+def see(ctr):
     f=fdic[ctr]['f']
     html=most_recent_file_in_folder(f,'.html')
     print(html)
     time_sleep(0.3)
     open_url(html)
-    if type(ctr_or_ctr_list) == list:
-        if len(ctr_or_ctr_list):
-            see(ctr_or_ctr_list,fdic=fdic)
+
 
 def trash(ctr):
   f=fdic[ctr]['f']
   trash=opj(pname(f),'_Trash')
   mkdirp(trash)
   os_system('mv',f,trash)
+
 
 def summarize_run(src,min_duration):
     files = []
@@ -44,34 +51,46 @@ def summarize_run(src,min_duration):
     filtered_files = [f for f in files if not any(ignore in f for ignore in ignore_list)]
 
     file_info = {}
-    for file in filtered_files:
-      file_info[file] = (os.path.getsize(file), os.path.getctime(file))
-
+    for f in filtered_files:
+      file_info[f] = dict(
+          size=os.path.getsize(f),
+          t=os.path.getctime(f),
+        )
+    stars=0
+    comments=[]
+    for f in filtered_files:
+      #cm(f)
+      if 'star' in f:
+        stars+=1
+      if 'comment' in f:
+        comments.append(f2t(f))
     extension_counts = {}
     earliest_time=2*time.time()
     latest_time=-1
-    for file, (size, t) in file_info.items():
+    for f in file_info:
+      size, t = file_info[f]['size'],file_info[f]['t']
       if t<earliest_time:
         earliest_time=t
       if t>latest_time:
         latest_time=t
-      extension = file.split('.')[-1]
+      extension = f.split('.')[-1]
       extension_counts.setdefault(extension, {'total_size': 0, 'count': 0})
       extension_counts[extension]['total_size'] += size
       extension_counts[extension]['count'] += 1
-    #if 'html' not in extension_counts:
-    #    return None
     duration=latest_time-earliest_time
     if duration<min_duration:
         return None
-    s=[src]
+    s=[stars*'*',src.replace(pname(src),'')[1:]]
     for extension, counts in extension_counts.items():
         s.append(d2n(
             extension,':',counts['count'],'/',dp(bytes_to_mb(counts['total_size']),2)
         ))
     s.append(d2n(int(duration),'s'))
+    if comments:
+      s.append(d2n('\n\t-'+'\n\t-'.join(comments)))
     s=' '.join(s)
     return s
+
 
 def trash_no_html():
   for ctr in fdic:
@@ -81,8 +100,9 @@ def trash_no_html():
       trash(ctr)
 
 
-
-def dir(src='project_tac_ideal',min_t=1):
+def dir(min_t=1):
+  ps=sggo(opjh('project_*'))
+  src=select_from_list(ps)
   min_duration=min_t
   fs=sggo(src+'/*')
   ctr=0

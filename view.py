@@ -29,6 +29,8 @@ def merge_content(
     #cg(f)
     if '/env/' in f:
       continue
+    if 'star-' in f:
+      continue
     div=''
     con=False
     for f_ in f.split('/'):

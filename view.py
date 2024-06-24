@@ -58,7 +58,7 @@ def merge_content(
 </object>
 </div>
           """.replace(
-              'PDFFILE',opjh(f))
+              'PDFFILE',f.replace(w,'')[1:])#opjh(f))
               #f.replace(w+'/','')).replace(
               #  'HEIGHT',str(height)).replace(
               #    'WIDTH',str(width))

@@ -5,7 +5,7 @@
 ignore_list = ['env']
 extensions = ['.txt','.pdf','.py','.pkl','.pth','.html']+IMAGE_EXTENSIONS
 fdic={}
-
+from projutils.view import merge_content
 
 def bytes_to_mb(bytes):
   return bytes / (1024 ** 2)
@@ -34,6 +34,9 @@ def see(ctr):
     print(html)
     time_sleep(0.3)
     open_url(html)
+
+def merge(ctr):
+    merge_content(w=fdic[ctr]['f'],default_height=u2.sn.default_height,newtab=True)
 
 
 def trash(ctr):
@@ -81,11 +84,12 @@ def summarize_run(src,min_duration):
     if duration<min_duration:
         return None
     s=[stars*'*',src.replace(pname(src),'')[1:]]
-    for extension, counts in extension_counts.items():
-        s.append(d2n(
-            extension,':',counts['count'],'/',dp(bytes_to_mb(counts['total_size']),2)
-        ))
-    s.append(d2n(int(duration),'s'))
+    if False:
+      for extension, counts in extension_counts.items():
+          s.append(d2n(
+              extension,':',counts['count'],'/',dp(bytes_to_mb(counts['total_size']),2)
+          ))
+    s.append(d2n('\t',int(duration),'s'))
     if comments:
       s.append(d2n('\n\t-'+'\n\t-'.join(comments)))
     s=' '.join(s)

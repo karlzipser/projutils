@@ -10,6 +10,7 @@ def get_net(
   net_class=None,
   weights_file='',
   run_path='',
+  latest=False,
 ):
   """
   if using run_path, expect a project having:
@@ -39,7 +40,11 @@ def get_net(
     spec = importlib.util.spec_from_file_location(module_name,file_path)
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
-    w=opj(pname(pname(module.net_path)),'weights/best.pth')
+    if latest:
+      q='latest'
+    else:
+      q='best'
+    w=opj(pname(pname(module.net_path)),'weights/'+q+'.pth')
     # allow to work if no saved weights
     return get_net(device=device,net_class=module.Net,weights_file=w)
   else:

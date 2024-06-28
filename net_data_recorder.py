@@ -1,4 +1,6 @@
-## 79 ########################################################################
+##                                                                          ##
+##############################################################################
+##                                                                          ##
 print(__file__)
 from utilz2 import *
 import torch
@@ -81,10 +83,23 @@ def get_accuracy2(predictions,labels):
 #eoc
 
 #EOF
-## 79 ########################################################################
+
+##                                                                          ##
+##############################################################################
+##                                                                          ##
 
 if False:
-    
+    def moving_average(data, window_size):
+        """ Smooth data using a moving average """
+        cumsum = np.cumsum(data)
+        cumsum[window_size:] = cumsum[window_size:] - cumsum[:-window_size]
+        return cumsum[window_size - 1:] / window_size
+
+    def xy_moving_average(x,y,window_size):
+        x,y=na(x),na(y)
+        sx=moving_average(x,window_size)
+        sy=moving_average(y,window_size)
+        return x,y
     
     processed=loD('processed');clf()
     figure(2);clf()
@@ -94,10 +109,14 @@ if False:
         for p in processed:
             f.append(p['accuracy'][classes[c]])
             ig.append(p['ig'])
-        plot(ig,f,label=classes[c])
+        x=moving_average(ig,100)
+        y=moving_average(f,100)
+        plot(x,y,label=classes[c])
     plt.title('accuracy')
     plt.legend(kys(classes),loc='upper left')
     plt.ylim(0,1)
+
+
 
     figure(3);clf()
     for c in classes:
@@ -106,14 +125,21 @@ if False:
         for p in processed:
             f.append(p['f1_scores'][classes[c]])
             ig.append(p['ig'])
-        plot(ig,f,label=classes[c])
+        x=moving_average(ig,100)
+        y=moving_average(f,100)
+        plot(x,y,label=classes[c])
     plt.title('f1-scores')
     plt.legend(kys(classes),loc='upper left')
-    plt.ylim(0,1)
+    #plt.ylim(0,1)
+
+
+
 
     fig=figure(1);clf()
     ax=fig.add_subplot(111)
-    disp=ConfusionMatrixDisplay(confusion_matrix=processed[-1]['confusion_matrix'],display_labels=kys(classes))
+    disp=ConfusionMatrixDisplay(
+        confusion_matrix=processed[-1]['confusion_matrix'],
+        display_labels=kys(classes))
     disp.plot(ax=ax,cmap=plt.cm.Blues)
 
 
@@ -123,9 +149,14 @@ if False:
     for p in processed:
         f.append(p['loss'])
         ig.append(p['ig'])
-    plot(ig,f,label=classes[c])
+    x=moving_average(ig,10)
+    y=moving_average(f,10)
+    plot(x,y,label=classes[c])
     plt.title('loss')
     plt.legend(kys(classes),loc='upper left')
     #plt.ylim(0,1)
 
+##                                                                          ##
+##############################################################################
+##                                                                          ##
 

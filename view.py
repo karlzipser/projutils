@@ -21,7 +21,7 @@ def merge_content(
       ' '
   ])
   mkdirp_(w)
-  fs=find_files(w,['*.py','*.pdf','*.txt'],noisy=False)
+  fs=find_files(w,['*.py','*.pdf','*.txt','*.png'],noisy=False)
   fs = sorted(fs, key=get_file_mtime)
   fs.reverse()
   hs=[]
@@ -47,7 +47,7 @@ def merge_content(
       width=height
     if '.pdf' in f:
       if not height:
-        height=512
+        height=256
         width=height
       div="""
 <div>
@@ -63,6 +63,16 @@ def merge_content(
               #  'HEIGHT',str(height)).replace(
               #    'WIDTH',str(width))
       #cb(div)
+    elif '.png' in f:
+      if not height:
+        height=256
+        width=height
+      div="""
+<div>
+<img src="FILE">
+</div>
+          """.replace(
+              'FILE',f.replace(w,'')[1:])
     else:
       txt=file_to_text(f)
       txt=d2n('file: ',qtds(f.replace(w,'')[1:]),'\n',txt)

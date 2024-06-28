@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 ## 79 ########################################################################
 
 #print(__file__)
@@ -119,11 +120,17 @@ if __name__ == '__main__':
     )
     p=getparser(**args)
     assert ope(p.src)
-    if p.most_recent:
-      p.src=most_recent_file_in_folder(p.src)
+
     newtab=True
+    src_previous=p.src
+
     while True:
-      merge_content(w=p.src,default_height=u2.sn.default_height,newtab=newtab)
+      if p.most_recent:
+        src=most_recent_file_in_folder(p.src)
+        if src!=src_previous:
+          newtab=True
+        src_previous=src
+      merge_content(w=src,default_height=u2.sn.default_height,newtab=newtab)
       newtab=False
       if not p.repeat:
         break

@@ -8,7 +8,7 @@ from sklearn.metrics import f1_score
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 class Data_Recorder():
 
-    def __init__(self,name='',dataloader=None,noise_level=0.,noise_p=0.,):
+    def __init__(self,name='',dataloader=None,noise_level=0.,noise_p=0.,n=100):
         super(Data_Recorder,self).__init__()
         packdict(self,locals())
         self.accumulated=[]
@@ -20,7 +20,7 @@ class Data_Recorder():
             for i in rlen(self.accumulated):
                 self.accumulated[i]['inputs']=None
             self.accumulated.append(data)
-            if len(self.accumulated)>=100:
+            if len(self.accumulated)>=self.n:
                 predictions,labels=self.get_predictions()
                 accuracy,correct,total=get_accuracy2(predictions,labels)
 
@@ -46,8 +46,9 @@ class Data_Recorder():
 
     def load(self,path):
         path=opj(path,'data_recorder-'+get_safe_name(self.name)+'.pkl')
-        #cg(path)
-        assert os.path.isfile(path)
+        if not os.path.isfile(path):
+            cE('Warning,',path,'cannot be loaded',r=True)
+            return
         self.accumulate=[]
         self.processed=lo(path,noisy=True)
         ig0=self.processed[-1]['ig']

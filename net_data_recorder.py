@@ -8,7 +8,7 @@ from sklearn.metrics import f1_score
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 class Data_Recorder():
 
-    def __init__(self,name='',dataloader=None,):
+    def __init__(self,name='',dataloader=None):
         super(Data_Recorder,self).__init__()
         packdict(self,locals())
         self.accumulated=[]
@@ -36,8 +36,24 @@ class Data_Recorder():
                     f1_scores=f1_score(labels,predictions,average=None),
                     confusion_matrix=confusion_matrix(labels,predictions),
                     ))
-                #soD('processed',self.processed)
                 self.accumulated=[]
+
+    def save(self,path):
+        assert path
+        mkdirp(path)
+        so(opj(path,'data_recorder-'+get_safe_name(self.name)+'.pkl'),
+            self.processed)
+
+    def load(self,path):
+        path=opj(path,'data_recorder-'+get_safe_name(self.name)+'.pkl')
+        cg(path)
+        assert os.path.isfile(path)
+        self.accumulate=[]
+        self.processed=lo(path,noisy=True)
+        ig0=self.processed[-1]['ig']
+        for p in self.processed:
+            p['ig']-=ig0
+
     def latest(self):
         if len(self.accumulated):
             return self.accumulated[-1]
@@ -63,6 +79,7 @@ class Data_Recorder():
             loss+=a['loss'].item()
         return loss/len(self.accumulated)
 
+
 def get_accuracy2(predictions,labels):
     correct={}
     total={}
@@ -86,73 +103,6 @@ def get_accuracy2(predictions,labels):
 ##############################################################################
 ##                                                                          ##
 
-if False:
-    def moving_average(data, window_size):
-        """ Smooth data using a moving average """
-        cumsum = np.cumsum(data)
-        cumsum[window_size:] = cumsum[window_size:] - cumsum[:-window_size]
-        return cumsum[window_size - 1:] / window_size
-
-    def xy_moving_average(x,y,window_size):
-        x,y=na(x),na(y)
-        sx=moving_average(x,window_size)
-        sy=moving_average(y,window_size)
-        return x,y
-    n=5
-    processed=loD('processed');clf()
-    figure(2);clf()
-    for c in classes:
-        f=[]
-        ig=[]
-        for p in processed:
-            f.append(p['accuracy'][classes[c]])
-            ig.append(p['ig'])
-        x=moving_average(ig,n)
-        y=moving_average(f,n)
-        plot(x,y,label=classes[c])
-    plt.title('accuracy')
-    plt.legend(kys(classes),loc='upper left')
-    #plt.ylim(0,1)
-
-
-
-    figure(3);clf()
-    for c in classes:
-        f=[]
-        ig=[]
-        for p in processed:
-            f.append(p['f1_scores'][classes[c]])
-            ig.append(p['ig'])
-        x=moving_average(ig,n)
-        y=moving_average(f,n)
-        plot(x,y,label=classes[c])
-    plt.title('f1-scores')
-    plt.legend(kys(classes),loc='upper left')
-    #plt.ylim(0,1)
-
-
-
-
-    fig=figure(1);clf()
-    ax=fig.add_subplot(111)
-    disp=ConfusionMatrixDisplay(
-        confusion_matrix=processed[-1]['confusion_matrix'],
-        display_labels=kys(classes))
-    disp.plot(ax=ax,cmap=plt.cm.Blues)
-
-
-    figure(4);clf()
-    f=[]
-    ig=[]
-    for p in processed:
-        f.append(p['loss'])
-        ig.append(p['ig'])
-    x=moving_average(ig,n)
-    y=moving_average(f,n)
-    plot(x,y,label=classes[c])
-    plt.title('loss')
-    plt.legend(kys(classes),loc='upper left')
-    #plt.ylim(0,1)
 
 ##                                                                          ##
 ##############################################################################

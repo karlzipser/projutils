@@ -24,10 +24,10 @@ def get_net(
   if net_class:
       net = net_class()
   if weights_file:
+    print('*** Attempting to load from',weights_file+':')
     assert not run_path
     assert ope(weights_file)
     assert net
-    print('*** Attempting to load from',weights_file+':')
     print('\t',net.load_state_dict(torch.load(weights_file,map_location=torch.device(device))))
   elif run_path:
     cb(run_path)

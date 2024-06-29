@@ -46,7 +46,7 @@ class Data_Recorder():
 
     def load(self,path):
         path=opj(path,'data_recorder-'+get_safe_name(self.name)+'.pkl')
-        cg(path)
+        #cg(path)
         assert os.path.isfile(path)
         self.accumulate=[]
         self.processed=lo(path,noisy=True)

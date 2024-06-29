@@ -100,7 +100,7 @@ if False:
         sx=moving_average(x,window_size)
         sy=moving_average(y,window_size)
         return x,y
-    
+    n=5
     processed=loD('processed');clf()
     figure(2);clf()
     for c in classes:
@@ -109,12 +109,12 @@ if False:
         for p in processed:
             f.append(p['accuracy'][classes[c]])
             ig.append(p['ig'])
-        x=moving_average(ig,100)
-        y=moving_average(f,100)
+        x=moving_average(ig,n)
+        y=moving_average(f,n)
         plot(x,y,label=classes[c])
     plt.title('accuracy')
     plt.legend(kys(classes),loc='upper left')
-    plt.ylim(0,1)
+    #plt.ylim(0,1)
 
 
 
@@ -125,8 +125,8 @@ if False:
         for p in processed:
             f.append(p['f1_scores'][classes[c]])
             ig.append(p['ig'])
-        x=moving_average(ig,100)
-        y=moving_average(f,100)
+        x=moving_average(ig,n)
+        y=moving_average(f,n)
         plot(x,y,label=classes[c])
     plt.title('f1-scores')
     plt.legend(kys(classes),loc='upper left')
@@ -149,8 +149,8 @@ if False:
     for p in processed:
         f.append(p['loss'])
         ig.append(p['ig'])
-    x=moving_average(ig,10)
-    y=moving_average(f,10)
+    x=moving_average(ig,n)
+    y=moving_average(f,n)
     plot(x,y,label=classes[c])
     plt.title('loss')
     plt.legend(kys(classes),loc='upper left')

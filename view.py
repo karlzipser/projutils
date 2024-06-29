@@ -100,8 +100,34 @@ def merge_content(
         pass#cy(div)
     if div:
       hs.append(div)
-  hs=[css]+[d2n('<font face="Courier"><h1>',w.replace(opjh(),''),
-    '</h1></font>')]+hs
+
+  hs=[css]+["""
+<font face="Courier">
+<h3 id="copyText">"""+w.replace(opjh(),'')+"""</h3>
+</font>
+<script>
+  document.getElementById('copyText').addEventListener('click', function() {
+      // Create a temporary textarea element
+      const textarea = document.createElement('textarea');
+      textarea.value = this.innerText;
+      document.body.appendChild(textarea);
+
+      // Select the text and copy it
+      textarea.select();
+      document.execCommand('copy');
+
+      // Remove the temporary textarea element
+      document.body.removeChild(textarea);
+
+      // Optionally, provide feedback to the user
+      alert('Text copied to clipboard!');
+  });
+</script>
+  """]+hs
+
+
+  #hs=[css]+[d2n('<font face="Courier"><h3>',w.replace(opjh(),''),
+  #  '</h3></font>')]+hs
   htmlfile=opj(w,'_'+'merge.html')
   text_to_file(
     htmlfile,

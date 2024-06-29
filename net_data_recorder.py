@@ -24,10 +24,8 @@ class Data_Recorder():
                 predictions,labels=self.get_predictions()
                 accuracy,correct,total=get_accuracy2(predictions,labels)
 
-                if 'test' not in self.name:
-                    loss=self.get_mean_loss()
-                else:
-                    loss=None
+                loss=self.get_mean_loss()
+
                 self.processed.append(dict(
                     t=data['t'],
                     ig=data['ig'],
@@ -38,7 +36,7 @@ class Data_Recorder():
                     f1_scores=f1_score(labels,predictions,average=None),
                     confusion_matrix=confusion_matrix(labels,predictions),
                     ))
-                soD('processed',self.processed)
+                #soD('processed',self.processed)
                 self.accumulated=[]
     def latest(self):
         if len(self.accumulated):

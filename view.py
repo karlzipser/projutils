@@ -27,14 +27,16 @@ def merge_content(
   fs.reverse()
   
   tabdic=dict(
-      py=[],
-      confusion=[],
-      scores=[],
-      accuracy=[],
-      txt=[],
       loss=[],
       examples=[],
       outputs=[],
+      scores=[],
+      accuracy=[],
+      confusion=[],
+      py=[],
+      txt=[],
+      
+
     )
   for f in fs:
     #cg(f)

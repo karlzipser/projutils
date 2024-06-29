@@ -8,7 +8,7 @@ from sklearn.metrics import f1_score
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 class Data_Recorder():
 
-    def __init__(self,name='',dataloader=None):
+    def __init__(self,name='',dataloader=None,noise_level=0.,noise_p=0.,):
         super(Data_Recorder,self).__init__()
         packdict(self,locals())
         self.accumulated=[]

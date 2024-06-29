@@ -25,7 +25,13 @@ def merge_content(
   fs=find_files(w,['*.py','*.pdf','*.txt','*.png'],noisy=False)
   fs = sorted(fs, key=get_file_mtime)
   fs.reverse()
-  hs=[]
+  
+  tabdic=dict(
+      pdf=[],
+      png=[],
+      txt=[],
+      py=[],
+    )
   for f in fs:
     #cg(f)
     if '/env/' in f:
@@ -46,7 +52,9 @@ def merge_content(
     else:
       height=0
       width=height
+
     if '.pdf' in f:
+      k='pdf'
       if not height:
         height=256
         width=height
@@ -59,12 +67,10 @@ def merge_content(
 </object>
 </div>
           """.replace(
-              'PDFFILE',f.replace(w,'')[1:])#opjh(f))
-              #f.replace(w+'/','')).replace(
-              #  'HEIGHT',str(height)).replace(
-              #    'WIDTH',str(width))
-      #cb(div)
+              'PDFFILE',f.replace(w,'')[1:])
+
     elif '.png' in f:
+      k='png'
       if not height:
         height=256
         width=height
@@ -78,7 +84,9 @@ def merge_content(
       txt=file_to_text(f)
       txt=d2n('file: ',qtds(f.replace(w,'')[1:]),'\n',txt)
       if txt:
+
         if '.txt' in f:
+          k='txt'
           div=d2n(
             '<div style="white-space: pre-line;">',
             '<font face="Courier">',
@@ -86,20 +94,23 @@ def merge_content(
             '</font>',
             '</div>',
           )
+
         else:
+          k='py'
           div=highlight(txt,PythonLexer(),HtmlFormatter())
         div='\n'.join([
               """<div style="height:HEIGHTpx;border:1px solid ;overflow:auto;">""",
               div,
               '</div>\n',
           ])
+
     if not height:
       height=default_height
     div=div.replace('HEIGHT',str(height))
     if 'application/pdf' in div:
         pass#cy(div)
     if div:
-      hs.append(div)
+      tabdic[k]=div+'\n\n'
 
   hs=[css]+["""
 <font face="Courier">
@@ -123,7 +134,9 @@ def merge_content(
       alert('Text copied to clipboard!');
   });
 </script>
-  """]+hs
+  """]
+  for k in tabdic:
+    hs+=[tabdic[k]]
 
 
   #hs=[css]+[d2n('<font face="Courier"><h3>',w.replace(opjh(),''),

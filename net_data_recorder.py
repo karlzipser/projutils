@@ -26,7 +26,9 @@ class Data_Recorder():
                 accuracy,correct,total=get_accuracy2(predictions,labels)
 
                 loss=self.get_mean_loss()
-
+                f1_scores=f1_score(labels,predictions,average=None)
+                #if len(f1_scores)<3:
+                #    print(labels,predictions)
                 self.processed.append(dict(
                     t=data['t'],
                     ig=data['ig'],
@@ -34,7 +36,7 @@ class Data_Recorder():
                     correct=correct,
                     total=total,
                     loss=loss,
-                    f1_scores=f1_score(labels,predictions,average=None),
+                    f1_scores=f1_scores,
                     confusion_matrix=confusion_matrix(labels,predictions),
                     ))
                 self.accumulated=[]
@@ -86,7 +88,7 @@ def get_accuracy2(predictions,labels):
     correct={}
     total={}
     accuracy={}
-    for i in range(10):
+    for i in range(len(labels)):
         correct[i]=0
         total[i]=0
 
@@ -94,8 +96,12 @@ def get_accuracy2(predictions,labels):
         total[l]+=1
         if l==p:
             correct[l]+=1
-    for i in range(10):
-        accuracy[i]=correct[i]/total[i]
+    for i in range(len(labels)):
+        #print(i,correct[i],total[i])
+        if total[i]>0:
+            accuracy[i]=correct[i]/total[i]
+        else:
+            accuracy[i]=0
     return accuracy,correct,total
 #eoc
 
